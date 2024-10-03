@@ -5,7 +5,7 @@ class Setup:
     def __init__(self, num_consumers) -> None:
         self.rabbit_manager = get_rabbit_manager()
         self.channels = [self.rabbit_manager.create_channel() for _ in range(num_consumers)]
-        self.queue_name = 'entrance_queue'
+        self.queue_name = 'exit_queue'
         self.setup_consumers()
 
     def setup_consumers(self):
