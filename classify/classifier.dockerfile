@@ -18,4 +18,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 4000
 
-CMD ["uvicorn", "app.main:app", "--port", "4000" , "--workers","2"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0","--port", "4000" , "--workers","2"]

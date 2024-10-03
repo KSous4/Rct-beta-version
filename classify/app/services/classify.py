@@ -8,7 +8,7 @@ class Classifier:
     def __init__(self):
         pass
 
-    model = YOLO('./yolov10x.pt')
+    model = YOLO('/app/services/yolov10x.pt')
 
     classes_parse = {
         2.0: 1,
