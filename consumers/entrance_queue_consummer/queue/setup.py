@@ -18,7 +18,7 @@ class Setup:
 
     def callback(self, ch, method, properties, body):
         try:
-            MsgHandler.classify(body)
+            MsgHandler.classify(self.rabbit_manager,ch,body)
             ch.basic_ack(delivery_tag=method.delivery_tag)
         except Exception as e:
             print(f"Error processing message: {e}")

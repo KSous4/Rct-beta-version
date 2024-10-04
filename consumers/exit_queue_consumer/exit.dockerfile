@@ -4,6 +4,6 @@ COPY . /exit
 
 WORKDIR /exit
 
-RUN pip install -r /entrance/requirements.txt
+RUN pip install -r /exit/requirements.txt
 
 CMD [ "python3", "main.py"]

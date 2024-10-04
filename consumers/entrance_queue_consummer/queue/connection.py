@@ -55,7 +55,6 @@ class RabbitManager:
                 delivery_mode=2,
             )
         )
-        self.close_channel(channel)
 
 def get_rabbit_manager():
     return RabbitManager.get_instance()

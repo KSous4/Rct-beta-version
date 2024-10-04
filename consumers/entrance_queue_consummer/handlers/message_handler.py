@@ -1,17 +1,41 @@
-import json
+from json import dumps, loads, JSONDecodeError
+from utils.image_getter import ImageGetter
+from requests import post
 class MsgHandler:
 
-    def __init__(self) -> None:
+    def __init__() -> None:
         pass
 
-    def classify(body):
+    def classify(rabbit_conn,channel,body):
     
         try:
-            msg = json.loads(body.decode('utf-8'))
+            msg = loads(body.decode('utf-8'))
             
-            print(msg.keys())
+            id = msg.get('id')
 
-            return 0
-        except (json.JSONDecodeError, UnicodeDecodeError) as e:
+            data = ImageGetter.parse_link(id)
+
+
+            try :
+                post('https:///classifier/classify')
+            except:
+                raise
+
+            files = [(
+                'file',
+                (
+                    open('./image.jpg')
+                )
+            )]
+
+
+            rabbit_conn.publish_message(
+                'exit_queue',channel,dumps(data)
+            )
+
+
+
+
+
+        except (JSONDecodeError, UnicodeDecodeError) as e:
             print(f"Error processing message: {e}")
-            return -1
