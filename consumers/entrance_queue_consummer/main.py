@@ -1,4 +1,4 @@
-from queue.setup import Setup
+from queue_setup.setup import Setup
 
 
 def main():

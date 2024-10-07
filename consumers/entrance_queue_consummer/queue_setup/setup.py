@@ -1,4 +1,4 @@
-from queue.connection import get_rabbit_manager
+from queue_setup.connection import get_rabbit_manager
 from handlers.message_handler import MsgHandler
 
 class Setup:
