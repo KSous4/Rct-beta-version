@@ -13,12 +13,12 @@ services:
       - RABBITMQ_DEFAULT_VHOST=rabbitmq
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_port_connectivity"]
-      interval: 10m
+      interval: 10s
       timeout: 30s
       retries: 10
 
   receiver_app:
-    image: receiver_app:1.1
+    image: receiver_app
     ports:
       - "3001:3000"
     volumes:
@@ -29,34 +29,35 @@ services:
       - RABBITMQ_PASS=pass
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 10m
+      interval: 10s
       timeout: 10s
       retries: 5
     depends_on:
       rabbit:
         condition: service_healthy
-      classifier:
-        condition: service_healthy
 
-  classifier:
-    image: classifier
-    ports:
-      - "4001:4000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
-      interval: 10m
-      timeout: 10s
-      retries: 5
-
-  consumer:
+  entrance_consumer:
     image: entrance_consumer
     environment:
       - RABBITMQ_HOST=rabbit
       - RABBITMQ_USER=user
       - RABBITMQ_PASS=pass
+      - PYTHONHTTPSVERIFY=0
+    volumes:
+      - ./data/config:/config:ro
     depends_on:
       receiver_app:
         condition: service_healthy
+
+  # exit_consumer:
+  #   image: exit-consumer
+  #   environment:
+  #     - RABBITMQ_HOST=rabbit
+  #     - RABBITMQ_USER=user
+  #     - RABBITMQ_PASS=pass
+  #   depends_on:
+  #     receiver_app:
+  #       condition: service_healthy
 
   nginx:
     image: nginx:1.27.1-alpine
@@ -68,7 +69,7 @@ services:
       - ./data/cert/:/cert
     healthcheck:
       test: ["CMD","pgrep","nginx"]
-      interval: 10m
+      interval: 10s
       timeout: 30s
       retries: 5
     depends_on:
